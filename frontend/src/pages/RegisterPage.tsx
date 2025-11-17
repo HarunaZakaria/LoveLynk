@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { register } from '../store/slices/authSlice';
 import { useForm } from 'react-hook-form';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { register: registerField, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       firstName: '',
@@ -46,6 +46,9 @@ const RegisterPage = () => {
               {...registerField('firstName', { required: 'First name is required' })}
               className="input-field w-full"
             />
+          {errors.firstName && (
+            <p className="text-red-400 text-sm mt-1">{errors.firstName.message as string}</p>
+          )}
           </div>
 
           <div>
@@ -55,6 +58,9 @@ const RegisterPage = () => {
               {...registerField('email', { required: 'Email is required' })}
               className="input-field w-full"
             />
+          {errors.email && (
+            <p className="text-red-400 text-sm mt-1">{errors.email.message as string}</p>
+          )}
           </div>
 
           <div>
@@ -64,6 +70,9 @@ const RegisterPage = () => {
               {...registerField('password', { required: 'Password is required', minLength: 6 })}
               className="input-field w-full"
             />
+          {errors.password && (
+            <p className="text-red-400 text-sm mt-1">{errors.password.message as string}</p>
+          )}
           </div>
 
           <div>
@@ -73,6 +82,9 @@ const RegisterPage = () => {
               {...registerField('age', { required: 'Age is required', min: 18, max: 100 })}
               className="input-field w-full"
             />
+          {errors.age && (
+            <p className="text-red-400 text-sm mt-1">{errors.age.message as string}</p>
+          )}
           </div>
 
           <div>
@@ -86,6 +98,9 @@ const RegisterPage = () => {
               <option value="non-binary">Non-binary</option>
               <option value="other">Other</option>
             </select>
+          {errors.gender && (
+            <p className="text-red-400 text-sm mt-1">{errors.gender.message as string}</p>
+          )}
           </div>
 
           <button

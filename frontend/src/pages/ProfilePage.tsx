@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { fetchUserProfile } from '../store/slices/userSlice';
 import { RootState } from '../store/store';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 
 const ProfilePage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { profile } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    dispatch(fetchUserProfile() as any);
+    dispatch(fetchUserProfile());
   }, [dispatch]);
 
   return (

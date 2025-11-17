@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { discoveryApi } from '../services/api';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 import { addMatch } from '../store/slices/matchSlice';
 
 const DiscoveryPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { data: stack = [], isLoading } = useQuery({
     queryKey: ['discovery-stack'],
@@ -72,7 +72,7 @@ const DiscoveryPage = () => {
             className="card absolute inset-0 cursor-grab active:cursor-grabbing"
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
-            onDragEnd={(e, { offset, velocity }) => {
+            onDragEnd={(_, { offset, velocity }) => {
               if (Math.abs(offset.x) > 100 || Math.abs(velocity.x) > 500) {
                 handleSwipe(offset.x > 0 ? 'like' : 'pass');
               }

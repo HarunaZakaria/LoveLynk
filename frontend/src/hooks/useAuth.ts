@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { fetchUserProfile } from '../store/slices/userSlice';
+import { useAppDispatch } from './useAppDispatch';
 
 export const useAuth = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { isAuthenticated, user, token } = useSelector((state: RootState) => state.auth);
   const { profile } = useSelector((state: RootState) => state.user);
 

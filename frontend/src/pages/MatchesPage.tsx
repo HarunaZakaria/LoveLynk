@@ -1,16 +1,17 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { fetchMatches } from '../store/slices/matchSlice';
 import { RootState } from '../store/store';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 
 const MatchesPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { matches, loading } = useSelector((state: RootState) => state.matches);
 
   useEffect(() => {
-    dispatch(fetchMatches() as any);
+    dispatch(fetchMatches());
   }, [dispatch]);
 
   if (loading) {

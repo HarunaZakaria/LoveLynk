@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 const OnboardingPage = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [answers, setAnswers] = useState<any>({});
 
   const handleNext = () => {
     if (step < 5) {

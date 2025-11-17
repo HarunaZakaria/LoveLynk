@@ -1,12 +1,10 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 import { logout } from '../store/slices/authSlice';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 
 const Layout = () => {
   const location = useLocation();
-  const dispatch = useDispatch();
-  const { user } = useAuth();
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     dispatch(logout());
