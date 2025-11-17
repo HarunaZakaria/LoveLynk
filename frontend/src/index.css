@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-cosmic-dark text-white font-body;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-cosmic-gradient text-white px-6 py-3 rounded-full font-semibold 
+           hover:opacity-90 transition-opacity shadow-lg hover:shadow-xl;
+  }
+  
+  .btn-secondary {
+    @apply bg-cosmic-slate text-white px-6 py-3 rounded-full font-semibold 
+           hover:bg-opacity-80 transition-all border border-cosmic-purple;
+  }
+  
+  .card {
+    @apply bg-cosmic-slate rounded-2xl p-6 shadow-xl border border-cosmic-purple/20;
+  }
+  
+  .input-field {
+    @apply bg-cosmic-slate border border-cosmic-purple/30 rounded-lg px-4 py-3 
+           text-white placeholder-gray-400 focus:outline-none focus:border-cosmic-purple;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-cosmic-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-cosmic-purple rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-cosmic-blue;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
