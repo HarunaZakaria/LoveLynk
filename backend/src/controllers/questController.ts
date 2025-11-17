@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import ConnectionQuest from '../models/ConnectionQuest';
 import Match from '../models/Match';
 
@@ -77,7 +78,7 @@ export const submitQuestResponse = async (req: Request, res: Response) => {
     }
 
     quest.responses.push({
-      userId: req.user!._id,
+      userId: new mongoose.Types.ObjectId(req.user!._id),
       response,
       submittedAt: new Date(),
     });

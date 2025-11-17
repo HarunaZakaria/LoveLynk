@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import Chat from '../models/Chat';
+import mongoose from 'mongoose';
+import Chat, { IMessage } from '../models/Chat';
 import Match from '../models/Match';
 
 export const getChats = async (req: Request, res: Response) => {
@@ -53,8 +54,9 @@ export const sendMessage = async (req: Request, res: Response) => {
       });
     }
 
-    const message = {
-      senderId,
+    const message: IMessage = {
+      _id: new mongoose.Types.ObjectId(),
+      senderId: new mongoose.Types.ObjectId(senderId),
       content,
       type: type || 'text',
       audioUrl,
@@ -79,10 +81,15 @@ export const markMessageRead = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Chat not found' });
     }
 
-    const message = chat.messages.id(req.params.messageId);
-    if (message && !message.readBy.includes(req.user!._id)) {
-      message.readBy.push(req.user!._id);
-      await chat.save();
+    const message = chat.messages.find(
+      (msg) => msg._id.toString() === req.params.messageId
+    );
+    if (message) {
+      const userObjectId = new mongoose.Types.ObjectId(req.user!._id);
+      if (!message.readBy.some((reader) => reader.toString() === userObjectId.toString())) {
+        message.readBy.push(userObjectId);
+        await chat.save();
+      }
     }
 
     res.json({ message: 'Marked as read' });
@@ -99,7 +106,9 @@ export const addReaction = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Chat not found' });
     }
 
-    const message = chat.messages.id(req.params.messageId);
+    const message = chat.messages.find(
+      (msg) => msg._id.toString() === req.params.messageId
+    );
     if (message) {
       const existingReaction = message.reactions.find(
         (r) => r.userId.toString() === req.user!._id
@@ -107,7 +116,10 @@ export const addReaction = async (req: Request, res: Response) => {
       if (existingReaction) {
         existingReaction.emoji = emoji;
       } else {
-        message.reactions.push({ userId: req.user!._id, emoji });
+        message.reactions.push({
+          userId: new mongoose.Types.ObjectId(req.user!._id),
+          emoji,
+        });
       }
       await chat.save();
     }

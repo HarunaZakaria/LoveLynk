@@ -2,17 +2,34 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
+const getEnvVar = (key: string): string => {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`${key} is not defined in environment variables`);
+  }
+  return value;
+};
+
+const JWT_SECRET = getEnvVar('JWT_SECRET');
+const JWT_REFRESH_SECRET = getEnvVar('JWT_REFRESH_SECRET');
+
 // Generate JWT Token
 const generateToken = (userId: string): string => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET!, {
-    expiresIn: process.env.JWT_EXPIRE || '15m',
-  });
+  const expiresIn = (process.env.JWT_EXPIRE ?? '15m') as jwt.SignOptions['expiresIn'];
+  const options: jwt.SignOptions = {
+    expiresIn,
+  };
+
+  return jwt.sign({ userId }, JWT_SECRET, options);
 };
 
 const generateRefreshToken = (userId: string): string => {
-  return jwt.sign({ userId }, process.env.JWT_REFRESH_SECRET!, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRE || '30d',
-  });
+  const expiresIn = (process.env.JWT_REFRESH_EXPIRE ?? '30d') as jwt.SignOptions['expiresIn'];
+  const options: jwt.SignOptions = {
+    expiresIn,
+  };
+
+  return jwt.sign({ userId }, JWT_REFRESH_SECRET, options);
 };
 
 // @desc    Register user
@@ -149,7 +166,7 @@ export const refreshToken = async (req: Request, res: Response) => {
 
     const decoded = jwt.verify(
       refreshToken,
-      process.env.JWT_REFRESH_SECRET!
+      JWT_REFRESH_SECRET
     ) as { userId: string };
 
     const user = await User.findById(decoded.userId);
